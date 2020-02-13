@@ -1,11 +1,11 @@
 import json
 
-
-with open('library1.json', 'w') as file:
-    json.dump({}, file)
-
-with open('library1.json', 'r') as file:
-    books = json.load(file)  # reads the file and turns it into a dictionary
+try:
+    with open('library1.json', 'x') as file:
+        json.dump({}, file)
+except FileExistsError:
+    with open('library1.json', 'r') as file:
+        books = json.load(file)
 
 
 """
@@ -90,8 +90,15 @@ def no_match(genre):
 
 
 """
+print_book is extracted functionality from multiple functions
 view_library views all books and genres in library
 """
+
+
+def print_book(book):
+    for key, value in book.items():
+        print(f"{key.title()} : {value.title()}")
+    print()
 
 
 def view_library():
@@ -99,9 +106,7 @@ def view_library():
         if books[genre]:
             print(f'{genre}')
         for book in books[genre]:
-            for key, value in book.items():
-                print(f"{key.title()} : {value.title()}")
-            print()
+            print_book(book)
 
 
 SEARCH_OPTIONS = """Do you want to search by:
@@ -138,25 +143,21 @@ def search_genre(genre_type):
         if genre_type == genre:
             print(f'{genre_type}')
             for book in books[genre_type]:
-                for key, value in book.items():
-                    print(f"{key.title()} : {value.title()}")
-                print()
+                print_book(book)
 
 
 def search_books(name, book_key):
-    matches = []
-    for genre in books:
-        for book in books[genre]:
-            if book[book_key] == name:
-                matches.append(book)
-                print(genre)
-                for key, value in book.items():
-                    print(f"{key.title()} : {value.title()}")
-                print()
+    matches = [book for genre in books for book in books[genre] if book[book_key] == name]
 
-    if not matches:
-        print(f'No book of {keyy} {name} in your library\n')
+    if matches:
+        for book in matches:
+            print_book(book)
+    else:
+        print(f'No book of {book_key} {name} in your library\n')
 
+"""
+mark_read marks book as read and tells you if the book isn't in your library
+"""
 
 def mark_read():
     read_book = input('\nWhat is the name of the book you have read?: ').title().strip()
@@ -185,6 +186,11 @@ def prompt_delete():
         print(f'{delete_what} is not a valid keyword!')
         prompt_delete()
 
+        
+"""
+delete_book lets you delete a book. If more than one book exists with that name it shows all books witht that name
+and makes the user choose which one they want to delete by choosing by author
+"""
 
 def delete_book():
     book_to_del = input('What book do you want to delete?: ').title().strip()
