@@ -1,4 +1,4 @@
-# milestone_2_improved
+# json library project
 
 Please note I am aware it would probably be better to store the genre with each book individually. I structured the data storage in this
 way to provide an additional challenge
