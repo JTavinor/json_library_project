@@ -1,5 +1,11 @@
 import functions
 
+"""
+User menu to navigate the app, split apart to improve readability and easier to change
+all other functionality is imported from the functions file
+"""
+
+
 MENU_PROMPT = """Do you want to:
 - Add a new genre to your library (g)
 - Add a new book to a genre (a)
